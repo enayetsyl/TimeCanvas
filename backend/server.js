@@ -4,10 +4,14 @@ const mongoose = require("mongoose");
 const cron = require("node-cron");
 const nodemailer = require("nodemailer");
 const quotes = require("./quote");
+const cors = require("cors");
 
 
 const app = express();
 app.use(express.json());
+
+// Enable CORS for all requests
+app.use(cors());
 
 // Connect to MongoDB using Mongoose
 mongoose

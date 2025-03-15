@@ -48,7 +48,7 @@ function App() {
   }, [dataLoaded, dob, lifeExpectancy]);
 
   // Handler for "Generate" button
-  const handleGenerate = (e) => {
+  const handleGenerate = async(e) => {
     e.preventDefault();
     if (!email || !dob || !lifeExpectancy) return;
 
@@ -58,6 +58,25 @@ function App() {
     localStorage.setItem("lifeExpectancy", lifeExpectancy);
 
     generateGridAndCountdown(dob, parseInt(lifeExpectancy, 10));
+    try {
+      const response = await fetch("https://time-canvas.vercel.app/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, dob, lifeExpectancy }),
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        console.log("User registered:", data);
+      } else {
+        console.error("Error:", data.error);
+      }
+    } catch (error) {
+      console.error("Failed to connect to backend:", error);
+    }
   };
 
   // Calculate weeks lived and update countdown
